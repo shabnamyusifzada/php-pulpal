@@ -1,0 +1,32 @@
+{
+  "name": "shabnamyusifzada/php-pulpal",
+  "description": "PulPal Payment System API",
+  "keywords": [
+    "php-pulpal",
+    "shabnamyusifzada",
+    "pulpal",
+    "payment",
+    "php"
+  ],
+  "authors": [
+    {
+      "name": "Shabnam Yusifzada",
+      "email": "yusifzade.shebnem@gmail.com"
+    }
+  ],
+  "homepage": "https://github.com/shabnamyusifzada/php-pulpal",
+  "license": "MIT",
+  "require": {
+    "php" : ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "ShabnamYusifzada\\Pulpal\\": "src/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
