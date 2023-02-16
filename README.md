@@ -51,6 +51,8 @@ Include the following to your file:
 
     require __DIR__.'/vendor/autoload.php'; 
     
+    use ShabnamYusifzada\Pulpal\Api\v1\TopUpPayment;
+    
     $config = include __DIR__."/config/pulpal.php";
     
     $payment = new TopUpPayment(
