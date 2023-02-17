@@ -12,7 +12,7 @@ The `php-pulpal` package allows you to accept and process payments using [PulPal
 
 ## Features
 
-* Top Up Payment from the merchant
+* Top-up Payment from the merchant to the client
 * Check status of transaction
 * Check merchant wallet balance and blocked funds
 
@@ -68,7 +68,7 @@ Include the following to your file:
 
 ## Using "Top Up Payment from the merchant" feature
 
-You must initialize payment for redirecting merchant to the payment page 
+You must initialize payment for redirecting the merchant to the payment page 
 using the following example: [Example](https://github.com/shabnamyusifzada/php-pulpal/blob/main/examples/top-up-payment/payment.php)
 
 And then process the payment result using the following example: [Example](https://github.com/shabnamyusifzada/php-pulpal/examples/top-up-payment/delivery.php)
@@ -80,6 +80,10 @@ Example right [here](https://github.com/shabnamyusifzada/php-pulpal/blob/main/ex
 ## Using "Check merchant wallet balance and blocked funds" feature
 
 Example right [here](https://github.com/shabnamyusifzada/php-pulpal/blob/main/examples/top-up-payment/check-wallet-balance.php)
+
+## Upcoming version
+
+"Payment from the client to the merchant" feature
 
 ## License
 
