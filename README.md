@@ -30,7 +30,7 @@ $ composer require shabnamyusifzada/php-pulpal
 
 ## Manual Install (without Composer)
 
-- [Download](https://github.com/shabnamyusifzada/php-paypal/archive/refs/heads/main.zip) the class library and extract the contents do a directory in your project structure.
+- [Download](https://github.com/shabnamyusifzada/php-pulpal/archive/refs/heads/main.zip) the class library and extract the contents do a directory in your project structure.
 - Upload the files to your web server.
 
 ## Setup
