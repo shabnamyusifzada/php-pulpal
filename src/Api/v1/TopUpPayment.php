@@ -3,6 +3,7 @@
 namespace ShabnamYusifzada\Pulpal\Api\v1;
 
 use ShabnamYusifzada\Pulpal\Utilities\Curl;
+
 /**
  * PulPal Payment API for transferring funds from wallet to the card
  *
@@ -116,6 +117,7 @@ class TopUpPayment
     /**
      * Create a new TopUpPayment object.
      *
+     * @param string $host
      * @param int $merchantId
      * @param int $providerId
      * @param string $apiPublicKey
@@ -200,7 +202,7 @@ class TopUpPayment
      * Generating signature and preparing necessary data for request
      *
      * @param string $path
-     * @param array $params
+     * @param array<int, string> $params
      * @param string $nonce
      * @return array
      */
@@ -209,16 +211,16 @@ class TopUpPayment
         //serialization of request parameters
         $serializedPaymentParams = json_encode($params, JSON_UNESCAPED_UNICODE);
 
-       /*
-       |
-       | Generating the signature on the base of HMAC-SHA256 algorithm
-       | with the concatenation of the following parameters and its converting from the binary type to base64:
-       | API_KEY + NONCE + PATH + BODY_TEXT
-       |
-       | Verification of the request signature on the PulPal side allows you
-       | to check whether the request really came from the merchant.
-       |
-       */
+        /*
+        |
+        | Generating the signature on the base of HMAC-SHA256 algorithm
+        | with the concatenation of the following parameters and its converting from the binary type to base64:
+        | API_KEY + NONCE + PATH + BODY_TEXT
+        |
+        | Verification of the request signature on the PulPal side allows you
+        | to check whether the request really came from the merchant.
+        |
+        */
         $signature = base64_encode(
             hash_hmac(
                 'sha256',
@@ -249,7 +251,7 @@ class TopUpPayment
     /**
      * Get product from the merchant system
      *
-     * @param array $data
+     * @param array<int, string> $data
      * @param string $nonce
      * @return array
      */
@@ -260,7 +262,7 @@ class TopUpPayment
         $requestParams = $requestData['params'];
 
         return $this->sendRequest(
-            $this->host.self::PRODUCT_GENERATION_API_PATH,
+            $this->host . self::PRODUCT_GENERATION_API_PATH,
             'POST',
             $requestParams,
             $requestHeaders
@@ -274,7 +276,7 @@ class TopUpPayment
      * @param string $nonce
      * @return array
      */
-    public function getProductByUniqueCode($productUniqueCode, $nonce = '')
+    public function getProductByUniqueCode($productUniqueCode, $nonce = null)
     {
         if (!$nonce) $nonce = time();
 
@@ -288,14 +290,14 @@ class TopUpPayment
     /**
      * Generating new product in the merchant system
      *
-     * @param array $name ['az' => 'Test az', 'ru' => 'Test ru', 'en' => 'Test en']
-     * @param array $description ['az' => 'Test description az', 'ru' => 'Test description ru', 'en' => 'Test description en']
-     * @param array $prices ['AZN' => 100, 'USD' => 170]
+     * @param array<string, string> $name ['az' => 'Test az', 'ru' => 'Test ru', 'en' => 'Test en']
+     * @param array<string, string> $description ['az' => 'Test description az', 'ru' => 'Test description ru', 'en' => 'Test description en']
+     * @param array<string, int> $prices ['AZN' => 100, 'USD' => 170]
      * @param string $externalId
      * @param string $nonce
      * @return array
      */
-    public function generateProduct(array $name, array $description, array $prices, $externalId, $nonce = '')
+    public function generateProduct(array $name, array $description, array $prices, $externalId, $nonce = null)
     {
         if (!$nonce) $nonce = time();
         $data = [
@@ -345,7 +347,7 @@ class TopUpPayment
         $requestParams = $requestData['params'];
 
         return $this->sendRequest(
-            $this->host.self::PAYMENT_INITIALIZATION_API_PATH,
+            $this->host . self::PAYMENT_INITIALIZATION_API_PATH,
             'POST',
             $requestParams,
             $requestHeaders
@@ -355,11 +357,11 @@ class TopUpPayment
     /**
      * Check transaction status in the merchant system
      *
-     * @param array $data ['externalId' => ''] Transaction external ID
+     * @param array<string, string> $data ['externalId' => '63bb1e404c78d1673207360'] Transaction external ID
      * @param string $nonce
      * @return array
      */
-    public function checkPayment(array $data, $nonce = '')
+    public function checkPayment(array $data, $nonce = null)
     {
         if (!$nonce) $nonce = time();
         $query = '?' . http_build_query($data, "", "&");
@@ -368,7 +370,7 @@ class TopUpPayment
         $requestParams = $requestData['params'];
 
         return $this->sendRequest(
-            $this->host.self::CHECK_PAYMENT_API_PATH . $query,
+            $this->host . self::CHECK_PAYMENT_API_PATH . $query,
             'GET',
             $requestParams,
             $requestHeaders
@@ -404,7 +406,7 @@ class TopUpPayment
     /**
      * Get transaction status by payment external ID
      *
-     * @param array $data ['externalId' => '']
+     * @param array<string, string> $data ['externalId' => '63bb1e404c78d1673207360']
      * @return array
      */
     public function getStatusByPaymentExternalId(array $data)
@@ -428,7 +430,7 @@ class TopUpPayment
      * 'message' => 'OK'
      * ]
      */
-    public function getWalletBalance($nonce = '')
+    public function getWalletBalance($nonce = null)
     {
         if (!$nonce) $nonce = time();
         $requestData = $this->prepareRequestData(self::WALLET_BALANCE_API_PATH, [], $nonce);
@@ -436,7 +438,7 @@ class TopUpPayment
         $requestParams = $requestData['params'];
 
         return $this->sendRequest(
-            $this->host.self::WALLET_BALANCE_API_PATH,
+            $this->host . self::WALLET_BALANCE_API_PATH,
             'GET',
             $requestParams,
             $requestHeaders
@@ -460,7 +462,7 @@ class TopUpPayment
      * 'message' => 'OK'
      * ]
      */
-    public function getWalletBalanceWithBlockedFunds($nonce = '')
+    public function getWalletBalanceWithBlockedFunds($nonce = null)
     {
         if (!$nonce) $nonce = time();
         $requestData = $this->prepareRequestData(self::WALLET_BALANCE_V2_API_PATH, [], $nonce);
@@ -468,7 +470,7 @@ class TopUpPayment
         $requestParams = $requestData['params'];
 
         return $this->sendRequest(
-            $this->host.self::WALLET_BALANCE_V2_API_PATH,
+            $this->host . self::WALLET_BALANCE_V2_API_PATH,
             'GET',
             $requestParams,
             $requestHeaders
